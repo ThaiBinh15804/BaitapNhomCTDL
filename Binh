@@ -2,6 +2,7 @@
 #include<conio.h>
 #include<string.h>
 #include<stdlib.h>
+#include<time.h>
 
 //Định nghĩa Kiểu dữ liệu dùng trong chương trình
 struct Date   //Kiểu dữ liệu cho ngày gồm 3 thành phần ngày, tháng, năm
@@ -200,7 +201,7 @@ void ghiFIle_Khachhang(KH_List ds)
     for (KH_Node *k = ds.head; k != NULL; k = k->next)  //Dùng vòng lặp để đọc toàn bộ danh sách hiện tại
     {
         //In thông tin của Khách hàng từ danh sách vào File
-        fprintf(f, "%-20s %-20s %-10d %-10s %-20s\n",k->data.maKH, k->data.tenKH, k->data.tuoi, 
+        fprintf(f, "%s|%s|%d|%s|%s\n",k->data.maKH, k->data.tenKH, k->data.tuoi, 
                                             k->data.gioiTinh, k->data.Sdt);    
     }
 
@@ -221,7 +222,7 @@ void docFile_Khachhang(KH_List &ds, int *slg_KH)
     Khachhang dulieu;           //Lưu trữ tạm thời dữ liệu đọc từ File
     KH_Node *tmp = ds.head;     //Biến tmp để duyệt toàn bộ danh sách có sẵn 
     
-    while ((ktra = fscanf(f, "%20s %20s %10d %10s %20s",dulieu.maKH, dulieu.tenKH, 
+    while ((ktra = fscanf(f, "\n%[^|]|%[^|]|%d|%[^|]|%s",dulieu.maKH, dulieu.tenKH, 
                 &dulieu.tuoi, dulieu.gioiTinh, dulieu.Sdt)) == 5)    //Đọc dữ liệ từ File vào biến tạm thời
     {
         KH_Node *p = create_KH_Node(dulieu);
@@ -269,7 +270,7 @@ void ghiFIle_Hanghoa(HH_List ds)
 
     for (HH_Node *k = ds.head; k != NULL; k = k->next)
     {
-        fprintf(f, "%-20s %-10d %-20.0lf\n", k->data.tenSP, k->data.soLuong, k->data.giaBan);    
+        fprintf(f, "%s|%d|%0.0lf\n", k->data.tenSP, k->data.soLuong, k->data.giaBan);    
     }
 
     fclose(f);
@@ -289,7 +290,7 @@ void docFile_Hanghoa(HH_List &ds, int *slg_HH)
     Hanghoa dulieu;
     HH_Node *tmp = ds.head;
     
-    while ((ktra = fscanf(f, "%20s %10d %20lf", dulieu.tenSP, &dulieu.soLuong, &dulieu.giaBan)) == 3)
+    while ((ktra = fscanf(f, "\n%[^|]|%d|%lf", dulieu.tenSP, &dulieu.soLuong, &dulieu.giaBan)) == 3)
     {
         HH_Node *p = create_HH_Node(dulieu);
         int find = 0;
@@ -335,7 +336,7 @@ void ghiFIle_ChitietHoadon(CTHD_List ds)
 
     for (CTHD_Node *k = ds.head; k != NULL; k = k->next)
     {
-        fprintf(f, "%-20s %-20s %-10d %-20.0lf\n", k->data.maHoadon, 
+        fprintf(f, "%s|%s|%d|%0.0lf\n", k->data.maHoadon, 
                 k->data.sanpham.tenSP, k->data.soluong_mua, k->data.tien);    
     }
 
@@ -356,7 +357,7 @@ void docFile_ChitietHoadon(CTHD_List &ds, int *slg_CTHD)
     ChitietHoadon dulieu;
     CTHD_Node *tmp = ds.head;
     
-    while ((ktra = fscanf(f, "%20s %20s %10d %20lf", dulieu.maHoadon, 
+    while ((ktra = fscanf(f, "\n%[^|]|%[^|]|%d|%lf", dulieu.maHoadon, 
                         dulieu.sanpham.tenSP, &dulieu.soluong_mua, &dulieu.tien)) == 4)
     {
         CTHD_Node *p = create_CTHD_Node(dulieu);
@@ -404,7 +405,7 @@ void ghiFIle_Hoadon(HD_List ds)
 
     for (HD_Node *k = ds.head; k != NULL; k = k->next)
     {
-        fprintf(f, "%-20s %-20s %-20s %02d/%02d/%-10d %-10d %-20.0lf\n", k->data.maHoadon, 
+        fprintf(f, "%s|%s|%s|%d/%d/%d|%d|%0.0lf\n", k->data.maHoadon, 
                     k->data.khachhang.maKH, k->data.khachhang.tenKH, 
                     k->data.ngay_nhap.ngay, k->data.ngay_nhap.thang, 
                     k->data.ngay_nhap.nam, k->data.soLuongCTHD, k->data.tongTien);    
@@ -427,7 +428,7 @@ void docFile_Hoadon(HD_List &HD_list, CTHD_List CTHD_list, int *slg_HD, int *slg
     Hoadon dulieu;
     HD_Node *tmp_HD = HD_list.head;
 
-    while ((ktra = fscanf(f, "%20s %20s %20s %02d/%02d/%10d %10d %20lf", 
+    while ((ktra = fscanf(f, "\n%[^|]|%[^|]|%[^|]|%d/%d/%d|%d|%lf", 
                             dulieu.maHoadon, dulieu.khachhang.maKH, dulieu.khachhang.tenKH, 
                             &dulieu.ngay_nhap.ngay, &dulieu.ngay_nhap.thang, &dulieu.ngay_nhap.nam, 
                             &dulieu.soLuongCTHD, &dulieu.tongTien)) == 8)
@@ -485,19 +486,137 @@ void docFile_Hoadon(HD_List &HD_list, CTHD_List CTHD_list, int *slg_HD, int *slg
     fclose(f);
 }
 
+void nhapdulieu_soNguyenDuong(int *n)
+{
+    int ktra;
+    do
+    {
+        fflush(stdin);
+        ktra = scanf("%d", n);
+        if (ktra == 0 && *n <= 0)
+        {
+            printf("\nDu lieu khong hop le. Vui long nhap lai: ");
+        }
+    } while (ktra == 0);
+}
+
+//hàm nhập số thực dương
+void nhapdulieu_soThucDuong(double *n)
+{
+    int ktra;
+    do
+    {
+        fflush(stdin);
+        ktra = scanf("%lf", n);
+        if (ktra == 0 && *n <= 0)
+        {
+            printf("\nDu lieu khong hop le. Vui long nhap lai: ");
+        }
+    } while (ktra == 0);
+}
+
+//Hàm nhập số điện thoại đúng định dạng (10 chữ số, bắt đầu từ số không). Nếu nhập sai yêu cầu nhập lại
+void nhap_Sdt(char *Sdt)
+{
+    int ktra = 0;
+    do
+    {
+        fflush(stdin);
+        printf("\nNhap so dien thoai: ");
+        scanf("%s", Sdt);
+        if (strlen(Sdt) != 10)
+        {
+            printf("\nSo dien thoai phai co 10 chu so");
+            ktra = 0;
+        }
+        else
+        {
+            for (int i = 0; i < strlen(Sdt); i++)
+            {
+                if (Sdt[i] < '0' || Sdt[i] > '9')
+                {
+                    printf("\nSo dien thoai phai la so");
+                    ktra = 0;
+                    break;
+                }
+                else
+                {
+                    ktra = 1;
+                }
+            }
+        }
+    } while (ktra == 0);
+}
+
+//hàm nhập tuổi đúng định dạng (từ 18 đến 100). Nếu nhập sai yêu cầu nhập lại
+void nhap_Tuoi(int *tuoi)
+{
+    int ktra = 0;
+    do
+    {
+        printf("\nNhap tuoi: ");
+        scanf("%d", tuoi);
+        if (*tuoi < 7 && *tuoi > 100)
+        {
+            printf("\nTuoi phai lon hon 100 nh.\nVui long nhap lai");
+        }
+        else
+        {
+            ktra = 1;
+        }
+    } while (ktra == 0);
+    
+
+}
+
+//Hàm nhập giới tính nam hoặc nữ (không phân biệt hoa thường). Nếu nhập sai yêu cầu nhập lại
+void nhap_Gioitinh(char *gioiTinh)
+{
+    int ktra = 0;
+    do
+    {
+        fflush(stdin);
+        printf("\nNhap gioi tinh: ");
+        scanf("%s", gioiTinh);
+
+        //đưa chuỗi về dạng chữ thường
+        for (int i = 0; i < strlen(gioiTinh); i++)
+        {
+            if (gioiTinh[i] >= 'A' && gioiTinh[i] <= 'Z')
+            {
+                gioiTinh[i] += 32;
+            }
+        }
+
+        if (strcmp(gioiTinh, "nam") != 0 && strcmp(gioiTinh, "nu") != 0)
+        {
+            printf("\nGioi tinh chi co the la Nam hoac Nu");
+            ktra = 0;
+        }
+        else
+        {
+            //Đưa kí tự đầu tiên về dạng chữ hoa
+            if (gioiTinh[0] >= 'a' && gioiTinh[0] <= 'z')
+            {
+                gioiTinh[0] -= 32;
+            }
+            
+            ktra = 1;
+
+        }
+    } while (ktra == 0);
+}
+
+
 //Hàm nhập, xuất thông tin của các đối tượng
 void nhapthongtin_khachhang(Khachhang &kh)
 {
     fflush(stdin);
-    printf("\nNhap ma khach hang: ", kh.maKH); 
-    scanf("%s",kh.maKH);
-    printf("\nNhap tuoi: ",kh.tuoi); 
-    scanf("%d",&kh.tuoi);
-    printf("\nNhap gioi tinh: ", kh.gioiTinh); 
-    scanf("%s",kh.gioiTinh);
-    printf("\nNhap so dien thoai: ", kh.Sdt); 
-    scanf("%s",kh.Sdt);
+    nhap_Tuoi(&kh.tuoi);
+    nhap_Gioitinh(kh.gioiTinh);
+    nhap_Sdt(kh.Sdt);
 }
+
 void xuatthongtin_khachhang(Khachhang kh)
 {
     printf("\nMa khach hang: %s",kh.maKH);
@@ -507,50 +626,56 @@ void xuatthongtin_khachhang(Khachhang kh)
     printf("\nSo dien thoai: %s",kh.Sdt);
 }
 
-void nhapthongtin_hanghoa(Hanghoa &hh)
+//Hàm nhập tên sản phẩm sao cho các từ cách nhau bởi dấu cách
+void nhap_tenSP(char *tenSP)
 {
     fflush(stdin);
     printf("\nNhap ten san pham: "); 
-    scanf("%s",hh.tenSP);
-    printf("\nNhap so luong: "); 
-    scanf("%d",&hh.soLuong);
-    printf("\nNhap gia ban: "); 
-    scanf("%lf", &hh.giaBan);
+    scanf("%[^\n]", tenSP);
+
+    //Xóa bỏ dấu cách ở đầu và cuối chuỗi
+    while (tenSP[0] == ' ')
+    {
+        strcpy(tenSP, tenSP + 1);
+    }
+    while (tenSP[strlen(tenSP) - 1] == ' ')
+    {
+        tenSP[strlen(tenSP) - 1] = '\0';
+    }
+
+    //Cach nhau giua cac tu bang dau cach
+    for (int i = 0; i < strlen(tenSP); i++)
+    {
+        if (tenSP[i] == ' ' && tenSP[i + 1] == ' ')
+        {
+            strcpy(tenSP + i, tenSP + i + 1);
+            i--;
+        }
+    }
+
 }
+
+void nhapthongtin_hanghoa(Hanghoa &hh)
+{
+    nhap_tenSP(hh.tenSP);
+    printf("\nNhap so luong: "); 
+    nhapdulieu_soNguyenDuong(&hh.soLuong);
+    printf("\nNhap gia ban: "); 
+    nhapdulieu_soThucDuong(&hh.giaBan);
+}
+
 void xuatthongtin_hanghoa(Hanghoa hh)
 {
     printf("\nTen san pham: %s", hh.tenSP);
     printf("\nSo luong sp: %d", hh.soLuong);
-    printf("\nGia ban: %lf", hh.giaBan);
+    printf("\nGia ban: %0.0lf", hh.giaBan);
 }
 
-//Hàm tính tiền cho mỗi chi tiết hoá đơn tương ứng
-void tinhTien_CTHD(ChitietHoadon *cthd, HH_List HH_list) 
+void nhapthongtin_chitiethoadon(ChitietHoadon &cthd)
 {
-    // Duyệt danh sách hàng hóa để tìm sản phẩm tương ứng với chi tiết hóa đơn
-    HH_Node *node = HH_list.head;
-    double tien = 0.00;
-    while (node != NULL) {
-        if (strcmp(node->data.tenSP, cthd->sanpham.tenSP) == 0) 
-        {
-            // Tìm được sản phẩm tương ứng, tính tiền cho chi tiết hóa đơn
-            tien = node->data.giaBan *cthd->soluong_mua; 
-            break;
-        }
-        node = node->next;
-    }
-
-    cthd->tien = tien;
-}
-
-void nhapthongtin_chitiethoadon(ChitietHoadon &cthd, HH_List HH_list)
-{
-    fflush(stdin);
-    printf("\nNhap ten san pham: ");
-    scanf("%s", cthd.sanpham.tenSP);
+    nhap_tenSP(cthd.sanpham.tenSP);
     printf("\nNhap so luong mua: "); 
-    scanf("%d",&cthd.soluong_mua);
-
+    nhapdulieu_soNguyenDuong(&cthd.soluong_mua);
 }
 
 void xuatthongtin_chitiethoadon(ChitietHoadon cthd)
@@ -561,18 +686,119 @@ void xuatthongtin_chitiethoadon(ChitietHoadon cthd)
     printf("\nSo tien: %0.0lf", cthd.tien);
 }
 
-void nhapthongtin_hoadon(Hoadon &hd)
+//Hàm nhập ngày tháng năm sao cho 
+void nhap_ngay_thang_nam(Date *date)
+{
+    printf("\nNhap ngay tao hoa don: ");
+    scanf("%d/%d/%d", &date->ngay, &date->thang, &date->nam);
+
+    //lấy thời gian hiện tại
+    time_t thoigian = time(0);
+    tm *now = localtime(&thoigian);
+
+    //kiểm tra ngày nhập có lớn hơn ngày hiện tại hay không
+    if (date->nam > now->tm_year + 1900 || 
+    (date->nam == now->tm_year + 1900 && date->thang > now->tm_mon + 1) || 
+    (date->nam == now->tm_year + 1900 && date->thang == now->tm_mon + 1 && date->ngay > now->tm_mday))
+    {
+        printf("\nNgay, thang, nam nhap khong hop le");
+        nhap_ngay_thang_nam(date);
+    }
+    else
+    {
+
+    //kiểm tra ngày nhập có hợp lệ hay không
+    if (date->ngay < 1 || date->ngay > 31 || date->thang < 1 || 
+            date->thang > 12 || date->nam < 2020 || date->nam > now->tm_year + 1900)
+    {
+        printf("\nNgay, thang, nam nhap khong hop le");
+        nhap_ngay_thang_nam(date);
+    }
+    else
+    {
+        //kiểm tra năm nhuận
+        if (date->nam % 400 == 0 || (date->nam % 4 == 0 && date->nam % 100 != 0))
+        {
+            if (date->thang == 2 && date->ngay > 29)
+            {
+                printf("\nVi nam %d la nam nhuan nen thang 2 co 29 ngay", date->nam);
+                nhap_ngay_thang_nam(date);
+            }
+        }
+        else
+        {
+            if (date->thang == 2 && date->ngay > 28)
+            {
+                printf("\nVi nam %d khong la nam nhuan nen thang 2 co 28 ngay", date->nam);
+                nhap_ngay_thang_nam(date);
+            }
+        }
+
+        //kiểm tra tháng 4,6,9,11
+        if ((date->thang == 4 || date->thang == 6 || date->thang == 9 || date->thang == 11) && date->ngay > 30)
+        {
+            printf("\nNgay, thang, nam khong hop le");
+            nhap_ngay_thang_nam(date);
+        }
+    }
+    }
+}
+
+//Hàm nhập tên khách hàng
+void nhap_tenKH(char *tenKh)
 {
     fflush(stdin);
-    // printf("\nNhap ma hoa don: "); 
-    // scanf("%s",hd.maHoadon);
     printf("\nNhap ten khach hang: ");
-    scanf("%s", hd.khachhang.tenKH);
-    printf("\nNhap ngay tao hoa don: "); 
-    scanf("%d/%d/%d",&hd.ngay_nhap.ngay,&hd.ngay_nhap.thang,&hd.ngay_nhap.nam);
-    printf("\nNhap so luong CTHD: ");
-    scanf("%d",&hd.soLuongCTHD);
+    scanf("%[^\n]", tenKh);
+
+    //Xoá dấu cách ở đầu và cuối chuỗi
+    while (tenKh[0] == ' ')
+    {
+        strcpy(tenKh, &tenKh[1]);
+    }
+    while (tenKh[strlen(tenKh) - 1] == ' ')
+    {
+        tenKh[strlen(tenKh) - 1] = '\0';
+    }
+
+    //các từ cách nhau bởi dấu cách
+    for (int i = 0; i < strlen(tenKh); i++)
+    {
+        if (tenKh[i] == ' ' && tenKh[i + 1] == ' ')
+        {
+            strcpy(&tenKh[i], &tenKh[i + 1]);
+            i--;
+        }
+    }
+    //chữ cái đầu tiên của mỗi từ đều viết hoa
+    for (int i = 0; i < strlen(tenKh); i++)
+    {
+        if (i == 0 || (i > 0 && tenKh[i - 1] == ' '))
+        {
+            if (tenKh[i] >= 'a' && tenKh[i] <= 'z')
+            {
+                tenKh[i] -= 32;
+            }
+        }
+        else
+        {
+            if (tenKh[i] >= 'A' && tenKh[i] <= 'Z')
+            {
+                tenKh[i] += 32;
+            }
+        }
+    }
+    
 }
+
+void nhapthongtin_hoadon(Hoadon &hd)
+{
+    nhap_tenKH(hd.khachhang.tenKH);
+    nhap_ngay_thang_nam(&hd.ngay_nhap);
+    printf("\nNhap so hang hoa khach hang muon mua: ");
+    nhapdulieu_soNguyenDuong(&hd.soLuongCTHD);
+}
+
 void xuatthongtin_hoadon(Hoadon hd)
 {
     printf("\nMa hoa don: %s",hd.maHoadon);
@@ -636,18 +862,48 @@ void them_vao_cuoi_hoadon(HD_List &l, HD_Node *p)
     }
 }
 
-//Hàm kiểm tra xem hàng hoá mới nhập có tồn tại trong danh sách chưa
-int ktra_HH(HH_List HH_list, Hanghoa hh)
+//Hàm so sánh 2 chuỗi bỏ qua viết hoa viết thường và khoản trắng
+int sosanh2Chuoi(char *s1, char *s2)
 {
-    HH_Node *tmp = HH_list.head;
-    while (tmp != NULL)
+    int i = 0;
+    while (s1[i] != '\0' && s2[i] != '\0')
     {
-        if (strcmp(tmp->data.tenSP, hh.tenSP) == 0)
-            return 1;
-        tmp = tmp->next;
+        if (s1[i] >= 'A' && s1[i] <= 'Z')
+        {
+            s1[i] += 32;
+        }
+        if (s2[i] >= 'A' && s2[i] <= 'Z')
+        {
+            s2[i] += 32;
+        }
+        if (s1[i] != s2[i])
+        {
+            return 0;
+        }
+        i++;
+    }
+
+    if (s1[i] == '\0' && s2[i] == '\0')
+    {
+        return 1;
     }
     return 0;
 }
+//Hàm kiểm tra xem hàng hoá mới nhập có tồn tại trong danh sách chưa trả về 1 nếu có, 0 nếu không
+int ktra_HH(HH_List HH_list, Hanghoa hh)
+{
+    HH_Node *k = HH_list.head;
+    while (k != NULL)
+    {
+        if (sosanh2Chuoi(k->data.tenSP, hh.tenSP))
+        {
+            return 1;
+        }
+        k = k->next;
+    }
+    return 0;
+}
+
 
 //Hàm tăng số lượng của hàng hoá khi nhập thêm sản phẩm đã tồn tại trước đây
 void tang_slgHH(HH_List &HH_list, Hanghoa hh, int slgTang)
@@ -695,12 +951,14 @@ void them_HH(HH_List &HH_list, int *slg_HH)
 }
 
 //Hàm kiểm tra Khách hàng đã có tên trong hệ thống chưa
-int ktra_KH(KH_List KH_list, Khachhang kh)
+int ktra_KH_tenKH(KH_List KH_list, char *tenKH)
 {
+    if (KH_list.head == NULL)
+        return 0;
     KH_Node *tmp = KH_list.head;
     while (tmp != NULL)
     {
-        if (strcmp(tmp->data.tenKH, kh.tenKH) == 0)
+        if (strcmp(tmp->data.tenKH, tenKH) == 0)
             return 1;
         tmp = tmp->next;
     }
@@ -714,11 +972,43 @@ int ktra_CTHD(HH_List HH_list, ChitietHoadon cthd)
     HH_Node *tmp = HH_list.head;
     while (tmp != NULL)
     {
-        if (strcmp(tmp->data.tenSP, cthd.sanpham.tenSP) == 0)
+        if (sosanh2Chuoi(tmp->data.tenSP, cthd.sanpham.tenSP) == 1)
             return 1;
         tmp = tmp->next;
     }
     return 0;
+}
+
+//Hàm kiểm tra mã khách hàng đã tồn tại trong file chưa
+int ktra_KH_maKH(KH_List KH_list, char *maKH)
+{
+    if (KH_list.head == NULL)
+        return 0;
+    KH_Node *tmp = KH_list.head;
+    while (tmp != NULL)
+    {
+        if (strcmp(tmp->data.maKH, maKH) == 0)
+            return 1;
+        tmp = tmp->next;
+    }
+    return 0;
+}
+
+//Hàm tạo mã khách hàng tự động không bị trùng với khách hàng đã có trong file
+void tao_maKH(KH_List KH_list, char *maKH)
+{
+    int i = 1;
+    char tmp[10];
+    sprintf(tmp, "%d", i);
+    strcpy(maKH, "KH");
+    strcat(maKH, tmp);
+    while (ktra_KH_maKH(KH_list, maKH) == 1)
+    {
+        i++;
+        sprintf(tmp, "%d", i);
+        strcpy(maKH, "KH");
+        strcat(maKH, tmp);
+    }
 }
 
 void them_KH(KH_List &KH_list, int *slg_KH, Khachhang &kh)
@@ -726,6 +1016,7 @@ void them_KH(KH_List &KH_list, int *slg_KH, Khachhang &kh)
     printf("\nKhach hang %s lan dau mua tai cua hang.", kh.tenKH);
     printf("\nVui long nhap thong tin khach hang: \n");
     nhapthongtin_khachhang(kh);
+    tao_maKH(KH_list, kh.maKH); 
     KH_Node *KH_tmp = create_KH_Node(kh);
     them_vao_cuoi_Khachhang(KH_list, KH_tmp);
     (*slg_KH)++;
@@ -803,6 +1094,25 @@ void tao_maHD(HD_List HD_list, char *maHD)
 }
 
 
+//Hàm tính tiền cho mỗi chi tiết hoá đơn tương ứng
+void tinhTien_CTHD(ChitietHoadon *cthd, HH_List HH_list) 
+{
+    // Duyệt danh sách hàng hóa để tìm sản phẩm tương ứng với chi tiết hóa đơn
+    HH_Node *node = HH_list.head;
+    double tien = 0.00;
+    while (node != NULL) {
+        if (sosanh2Chuoi(cthd->sanpham.tenSP, node->data.tenSP) == 1) 
+        {
+            // Tìm được sản phẩm tương ứng, tính tiền cho chi tiết hóa đơn
+            tien = node->data.giaBan *cthd->soluong_mua; 
+            break;
+        }
+        node = node->next;
+    }
+
+    cthd->tien = tien;
+}
+
 //Hàm thêm hoá đơn mới khi có khách hàng mua
 void them_HD(HD_List &HD_list, CTHD_List &CTHD_list, HH_List HH_list, KH_List &KH_list, 
                                                 int *slg_KH, int *slg_HD, int *slg_CTHD)
@@ -819,7 +1129,7 @@ void them_HD(HD_List &HD_list, CTHD_List &CTHD_list, HH_List HH_list, KH_List &K
         return;
     }
     
-    if (ktra_KH(KH_list, HD.khachhang) == 0)
+    if (ktra_KH_tenKH(KH_list, HD.khachhang.tenKH) == 0)
     {   
         Khachhang tmp = HD.khachhang;
         them_KH(KH_list, slg_KH, tmp);
@@ -844,7 +1154,7 @@ void them_HD(HD_List &HD_list, CTHD_List &CTHD_list, HH_List HH_list, KH_List &K
         do
         {
             printf("\n------ Nhap vao san pham mua thu %d ------", i);
-            nhapthongtin_chitiethoadon(CTHD, HH_list);  //Ds hàng hoá để tính tiền của hàng hoá
+            nhapthongtin_chitiethoadon(CTHD);
             strcpy(CTHD.maHoadon, HD.maHoadon);
         }
         while (giam_slgHH(CTHD, HH_list) == 1);
@@ -899,6 +1209,21 @@ void in_Hoadon(HD_List HD_list)
     _getch();
 }
 
+
+//Hàm in ra thông tin hoá đơn
+void inHD_theodangBang(HD_List HD_list)
+{
+    printf("\n-----------------------------------------------------------------------------------------");
+    printf("\nMa HD\tMa KH\tTen KH\t\t\t\tNgay lap\t\tTong tien");
+    for (HD_Node *i = HD_list.head; i != NULL; i = i->next)
+    {
+        printf("\n%s\t%s\t%-30s  %d/%d/%d\t\t%0.0lf", 
+        i->data.maHoadon, i->data.khachhang.maKH, i->data.khachhang.tenKH, 
+        i->data.ngay_nhap.ngay, i->data.ngay_nhap.thang, i->data.ngay_nhap.nam, i->data.tongTien);
+    }
+    _getch();
+}
+
 //Hàm sắp xếp danh sách hoá đơn giảm theo tổng tiền
 void SX_HD_tongTien_giam(HD_List &HD_list)
 {
@@ -914,6 +1239,9 @@ void SX_HD_tongTien_giam(HD_List &HD_list)
             }
         }
     }
+
+    printf("\n\nDanh sach hoa don sau khi sap xep giam dan theo tong tien: ");
+    inHD_theodangBang(HD_list);
 }
 
 //Hàm sắp xếp danh sách hoá đơn tăng theo mã Khách hàng
@@ -931,6 +1259,9 @@ void SX_HD_maKH_tang(HD_List &HD_list)
             }
         }
     }
+
+    printf("\n\nDanh sach hoa don sau khi sap xep tang dan theo ma khach hang: ");
+    inHD_theodangBang(HD_list);
 }
 
 
@@ -995,6 +1326,19 @@ void lietKe_HD_maKH(HD_List HD_list, char maKH[])
 //Hàm thống kê doanh thu theo ngày
 void thongKe_doanhThu_ngay(HD_List HD_List, int ngay, int thang, int nam)
 {
+    //Kiểm tra ngày nhập so với ngày hiện tại
+    tm *today = new tm;
+    time_t ltime = time(0);
+    today = localtime(&ltime);
+
+    if (ngay > today->tm_mday || thang > today->tm_mon + 1 || 
+        nam > today->tm_year + 1900 || nam < 2020 || thang < 1 
+        || ngay < 1 || thang > 12 || ngay > 31)
+    {
+        printf("\nNgay nhap khong hop le!");
+        return;
+    }
+
     HD_Node *tmp = HD_List.head;
     double tong = 0;
     int i = 0;
@@ -1017,6 +1361,17 @@ void thongKe_doanhThu_ngay(HD_List HD_List, int ngay, int thang, int nam)
 //Hàm thống kê doanh thu theo tháng
 void thongKe_doanhThu_thang(HD_List HD_List, int thang, int nam)
 {
+    //Kiểm tra tháng so với thời gian hiện tại
+    tm* now = new tm;
+    time_t tim = time(0);
+    now = localtime(&tim);
+    if (thang > now->tm_mon + 1 || (thang < 1 || thang > 12))
+    {
+        printf("\nThang khong hop le!");
+        return;
+    }
+
+
     HD_Node *tmp = HD_List.head;
     double tong = 0;
     int i = 0;
@@ -1038,6 +1393,16 @@ void thongKe_doanhThu_thang(HD_List HD_List, int thang, int nam)
 //Hàm thống kê doanh thu theo năm
 void thongKe_doanhThu_nam(HD_List HD_List, int nam)
 {
+    //Kiểm tra năm so với thời gian hiện tại
+    tm* now = new tm;
+    time_t timenow = time(0);
+    now = localtime(&timenow);
+    if (nam > now->tm_year + 1900 || nam <2020)
+    {
+        printf("\nNam nhap vao khong hop le", nam);
+        return;
+    }
+
     HD_Node *tmp = HD_List.head;
     double tong = 0;
     int i = 0;
@@ -1058,6 +1423,31 @@ void thongKe_doanhThu_nam(HD_List HD_List, int nam)
 //Hàm thống kê doanh thu theo quý
 void thongKe_doanhThu_quy(HD_List HD_List, int quy, int nam)
 {
+    //Kiểm tra năm so với thời gian hiện tại
+    tm *today = new tm;
+    time_t ltime = time(NULL);
+    today = localtime(&ltime);
+    if (nam > today->tm_year + 1900)
+    {
+        printf("\nNam %d chua den", nam);
+        return;
+    }
+
+    if (nam == today->tm_year + 1900)
+    {
+        if (quy > (today->tm_mon + 1) / 3 + 1 && quy <= 4)
+        {
+            printf("\nQuy %d chua den", quy);
+            return;
+        }
+    }
+
+    if (quy != 1 || quy != 2 || quy != 3 || quy != 4)
+    {
+        printf("\nQuy nhap vao khong hop le");
+        return;
+    }
+
     HD_Node *tmp = HD_List.head;
     double tong = 0;
     int i = 0;
@@ -1104,6 +1494,7 @@ void thongKe_doanhThu_quy(HD_List HD_List, int quy, int nam)
                     tong = tong + tmp->data.tongTien;
                 }
             }
+
         }
         tmp = tmp->next;
     }
@@ -1129,7 +1520,7 @@ void thongKe_doanhThu_ngay_thang_nam(HD_List HD_list)
     case 1:
         {
             Date ngay;
-            printf("\nNhap vao ngay ban muon thong ke (ngay/thang/nam): ");
+            printf("\nNhap vao ngay ban muon thong ke (dd/mm/yy VD: 01/01/2020): ");
             scanf("%d/%d/%d", &ngay.ngay, &ngay.thang, &ngay.nam);
             printf("\nCac hoa don cua ngay: %d/%d/%d", ngay.ngay, ngay.thang, ngay.nam);
             printf("\n--------------------------------");
@@ -1140,7 +1531,7 @@ void thongKe_doanhThu_ngay_thang_nam(HD_List HD_list)
     case 2:
         {
             int thang, nam;
-            printf("\nNhap vao thang ban muon thong ke (thang/nam): ");
+            printf("\nNhap vao thang ban muon thong ke (mm/yy VD: 01/2020): ");
             scanf("%d/%d", &thang, &nam);
             printf("\nCac hoa don cua thang: %d/%d", thang, nam);
             printf("\n--------------------------------");
@@ -1162,7 +1553,7 @@ void thongKe_doanhThu_ngay_thang_nam(HD_List HD_list)
     case 4:
         {
             int nam, quy;
-            printf("\nNhap vao quy ban muon thong ke (quy/nam): ");
+            printf("\nNhap vao quy ban muon thong ke (quy/nam VD: 3/2020): ");
             scanf("%d/%d", &quy, &nam);
             printf("\nCac hoa don cua quy: %d", nam);
             printf("\n--------------------------------");
@@ -1273,11 +1664,13 @@ int main()
         }
         case 7:
         {
+            inHD_theodangBang(HD_list);
             SX_HD_tongTien_giam(HD_list);
             break;
         }
         case 8: 
         {
+            inHD_theodangBang(HD_list);
             SX_HD_maKH_tang(HD_list);
             break;
         }
