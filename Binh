@@ -566,17 +566,15 @@ void nhap_Tuoi(int *tuoi)
     {
         printf("\nNhap tuoi: ");
         nhapdulieu_soNguyenDuong(tuoi);
-        if (*tuoi < 7 && *tuoi > 100)
+        if (*tuoi < 5 || *tuoi > 120)
         {
-            printf("\nTuoi phai lon hon 100 nh.\nVui long nhap lai");
+            printf("\nTuoi phai lon hon 5 nho hon 120.\nVui long nhap lai");
         }
         else
         {
             ktra = 1;
         }
     } while (ktra == 0);
-    
-
 }
 
 //Hàm nhập giới tính nam hoặc nữ (không phân biệt hoa thường). Nếu nhập sai yêu cầu nhập lại
@@ -699,7 +697,7 @@ void xuatthongtin_chitiethoadon(ChitietHoadon cthd)
 //Hàm nhập ngày tháng năm sao cho 
 void nhap_ngay_thang_nam(Date *date)
 {
-    printf("\nNhap ngay tao hoa don (dd/mm/yy): ");
+    printf("\nNhap ngay tao hoa don (dd/mm/yyyy): ");
     scanf("%d/%d/%d", &date->ngay, &date->thang, &date->nam);
 
     //lấy thời gian hiện tại
@@ -1530,7 +1528,7 @@ void thongKe_doanhThu_ngay_thang_nam(HD_List HD_list)
     case 1:
         {
             Date ngay;
-            printf("\nNhap vao ngay ban muon thong ke (dd/mm/yy VD: 01/01/2020): ");
+            printf("\nNhap vao ngay ban muon thong ke (dd/mm/yyyy VD: 01/01/2020): ");
             scanf("%d/%d/%d", &ngay.ngay, &ngay.thang, &ngay.nam);
             printf("\nCac hoa don cua ngay: %d/%d/%d", ngay.ngay, ngay.thang, ngay.nam);
             printf("\n--------------------------------");
@@ -1541,7 +1539,7 @@ void thongKe_doanhThu_ngay_thang_nam(HD_List HD_list)
     case 2:
         {
             int thang, nam;
-            printf("\nNhap vao thang ban muon thong ke (mm/yy VD: 01/2020): ");
+            printf("\nNhap vao thang ban muon thong ke (mm/yyyy VD: 01/2020): ");
             scanf("%d/%d", &thang, &nam);
             printf("\nCac hoa don cua thang: %d/%d", thang, nam);
             printf("\n--------------------------------");
@@ -1552,7 +1550,7 @@ void thongKe_doanhThu_ngay_thang_nam(HD_List HD_list)
     case 3:
         {
             int nam;
-            printf("\nNhap vao nam ban muon thong ke: ");
+            printf("\nNhap vao nam ban muon thong ke (yyyy VD: 2020): ");
             scanf("%d", &nam);
             printf("\nCac hoa don cua nam: %d", nam);
             printf("\n--------------------------------");
