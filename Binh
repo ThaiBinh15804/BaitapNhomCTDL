@@ -491,12 +491,21 @@ void nhapdulieu_soNguyenDuong(int *n)
     int ktra;
     do
     {
-        fflush(stdin);
-        ktra = scanf("%d", n);
-        if (ktra == 0 && *n <= 0)
+        if (scanf("%d", n) == 0)
         {
             printf("\nDu lieu khong hop le. Vui long nhap lai: ");
+            _getch();
         }
+        else if (*n <= 0)
+        {
+            printf("\nVui long nhap so nguyen duong. Vui long nhap lai: ");
+            _getch();
+        }
+        else
+        {
+            ktra = 1;
+        }
+
     } while (ktra == 0);
 }
 
@@ -511,6 +520,7 @@ void nhapdulieu_soThucDuong(double *n)
         if (ktra == 0 && *n <= 0)
         {
             printf("\nDu lieu khong hop le. Vui long nhap lai: ");
+            _getch();
         }
     } while (ktra == 0);
 }
@@ -555,7 +565,7 @@ void nhap_Tuoi(int *tuoi)
     do
     {
         printf("\nNhap tuoi: ");
-        scanf("%d", tuoi);
+        nhapdulieu_soNguyenDuong(tuoi);
         if (*tuoi < 7 && *tuoi > 100)
         {
             printf("\nTuoi phai lon hon 100 nh.\nVui long nhap lai");
@@ -924,7 +934,7 @@ void them_HH(HH_List &HH_list, int *slg_HH)
 {
     printf("\nNhap so hang hoa ban muon them: ");
     int n;
-    scanf("%d", &n);
+    nhapdulieu_soNguyenDuong(&n);
     
     for (int i = 1; i <= n; i++)
     {
@@ -937,7 +947,7 @@ void them_HH(HH_List &HH_list, int *slg_HH)
             printf("\nSan pham %s da ton tai trong kho!", hh.tenSP);
             int m;
             printf("\nVui long nhap vao so luong them moi cua san pham: ");
-            scanf("%d", &m);
+            nhapdulieu_soNguyenDuong(&m);
             tang_slgHH(HH_list, hh, m);
             (*slg_HH) = (*slg_HH) + m;
         }
