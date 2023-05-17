@@ -517,7 +517,7 @@ void nhapdulieu_soThucDuong(double *n)
     {
         fflush(stdin);
         ktra = scanf("%lf", n);
-        if (ktra == 0 && *n <= 0)
+        if (ktra == 0 || *n <= 0)
         {
             printf("\nDu lieu khong hop le. Vui long nhap lai: ");
             _getch();
@@ -699,7 +699,7 @@ void xuatthongtin_chitiethoadon(ChitietHoadon cthd)
 //Hàm nhập ngày tháng năm sao cho 
 void nhap_ngay_thang_nam(Date *date)
 {
-    printf("\nNhap ngay tao hoa don: ");
+    printf("\nNhap ngay tao hoa don (dd/mm/yy): ");
     scanf("%d/%d/%d", &date->ngay, &date->thang, &date->nam);
 
     //lấy thời gian hiện tại
@@ -1716,6 +1716,7 @@ int main()
             _getch();
             break;
         }
+
         case 11: 
         {
             printf("\nNhap vao ma khach hang cua hoa don ban muon tim: ");
@@ -1733,6 +1734,16 @@ int main()
         }
         case 0: return 1;
             break;
+        
+
+        default:
+        {
+            printf("\nKhong co lua chon nay. Vui long nhap lai!");
+            _getch();
+            break;
         }
+
+        }
+
     }
 }
