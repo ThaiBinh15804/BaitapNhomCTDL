@@ -20,11 +20,11 @@ struct NODE {
 };
 
 struct TREE {
-    NODE* Root;
+	NODE* Root;
 };
 
 void InitTree(TREE& t) {
-    t.Root = NULL;
+	t.Root = NULL;
 }
 
 //Tạo nút
@@ -79,11 +79,11 @@ int KiemTraPhanSo(value x) {
 }
 
 //Thêm nút vào cây
-void InsertNode(TREE& t, NODE* p)
+void InsertNode(TREE& t, NODE* p) 
 {
     if (t.Root == NULL)
         t.Root = p;
-    else
+    else 
     {
         NODE* f = NULL;
         NODE* q = t.Root;
@@ -133,7 +133,7 @@ void DeleteNode(TREE& t, value x) {
 
     if (p == NULL)
         return;
-    if (p->Left == NULL && p->Right == NULL)
+    if (p->Left == NULL && p->Right == NULL) 
     {
         if (f == NULL)
             t.Root = NULL;
@@ -145,7 +145,7 @@ void DeleteNode(TREE& t, value x) {
         }
         delete p;
     }
-    else if (p->Left != NULL && p->Right == NULL)
+    else if (p->Left != NULL && p->Right == NULL) 
     {
         if (f == NULL)
             t.Root = p->Left;
@@ -157,7 +157,7 @@ void DeleteNode(TREE& t, value x) {
         }
         delete p;
     }
-    else if (p->Left == NULL && p->Right != NULL)
+    else if (p->Left == NULL && p->Right != NULL) 
     {
         if (f == NULL)
             t.Root = p->Right;
@@ -169,7 +169,7 @@ void DeleteNode(TREE& t, value x) {
         }
         delete p;
     }
-    else if (p->Left != NULL && p->Right != NULL)
+    else if (p->Left != NULL && p->Right != NULL) 
     {
         NODE* q = p->Right;
         f = NULL;
@@ -237,19 +237,20 @@ void Traverse_RLN(NODE* root) {
 
 
 //Tạo cây nhị phân tìm kiếm nhập liệu từ bàn phím
-void CreateTree(TREE& t, int n)
+void CreateTree(TREE& t, int n) 
 {
     for (int i = 0; i < n; i++)
     {
         value x;
         printf("Nhap phan so thu %d: ", i + 1);
-
+        
         do
         {
             scanf_s("%d/%d", &x.tu, &x.mau);
             if (KiemTraPhanSo(x) == 0)
                 printf("\nPhan so khong hop le. \nVui long nhap lai: ");
-        } while (KiemTraPhanSo(x) == 0);
+        }
+        while (KiemTraPhanSo(x) == 0);
 
         NODE* p = CreateNode(x);
         InsertNode(t, p);
@@ -257,7 +258,7 @@ void CreateTree(TREE& t, int n)
 }
 
 //Tạo cây nhị phân tìm kiếm với số lượng yêu cầu và các giá trị là ngẫu nhiên
-void CreateTree_Random(TREE& t, int n)
+void CreateTree_Random(TREE& t, int n) 
 {
     srand(time(NULL));
     for (int i = 0; i < n; i++)
@@ -267,14 +268,15 @@ void CreateTree_Random(TREE& t, int n)
         {
             x.tu = rand() % 100;
             x.mau = rand() % 100;
-        } while (KiemTraPhanSo(x) == 0);
+        } 
+        while (KiemTraPhanSo(x) == 0);
         NODE* p = CreateNode(x);
         InsertNode(t, p);
     }
 }
 
 //Tạo cây tìm kiếm từ một  mảng
-void CreateTree_Array(TREE& t, value a[], int n)
+void CreateTree_Array(TREE& t, value a[], int n) 
 {
     for (int i = 0; i < n; i++)
     {
@@ -284,11 +286,11 @@ void CreateTree_Array(TREE& t, value a[], int n)
 }
 
 int coutNode(NODE* root) {
+	
+	if (root == NULL)
+		return 0;
 
-    if (root == NULL)
-        return 0;
-
-    return coutNode(root->Left) + coutNode(root->Right) + 1;
+	return coutNode(root->Left)+coutNode(root->Right)+1;
 }
 //Đếm số nút có giá trị lớn hơn 1
 int DemNodeLonHon1(NODE* root) {
@@ -301,19 +303,16 @@ int DemNodeLonHon1(NODE* root) {
 }
 
 //Tối giản tất cả các nút trong cây
-void ToiGian(NODE* root) {
+void ToiGian(NODE *root) {
     if (root == NULL)
         return;
     ToiGian(root->Left);
     ToiGian(root->Right);
     root->data = RutGonPhanSo(root->data);
-
-    printf("\nDa thuc hien");
-    _getch();
 }
 
 //Tìm kiếm trong cây có nút nào bằng x không
-int SearchNode(TREE t, value x)
+int SearchNode(TREE t, value x) 
 {
     NODE* p = t.Root;
 
@@ -329,7 +328,7 @@ int SearchNode(TREE t, value x)
 }
 
 //hàm nhập gồm 3 lựa chọn
-void nhap(TREE& t)
+void nhap(TREE &t)
 {
     printf("\n\n\t\t =========== NHAP DU LIEU ===========");
     printf("\n1. Nhap du lieu tu ban phim");
@@ -363,12 +362,13 @@ void nhap(TREE& t)
     {
         int n;
         printf("\nNhap so luong phan so: ");
-        do
+        do 
         {
             scanf_s("%d", &n);
             if (n <= 0)
                 printf("\nSo luong phan so khong hop le.\nVui long nhap lai: ");
-        } while (n <= 0);
+        } 
+        while (n <= 0);
 
         value* a = new value[n];
         for (int i = 0; i < n; i++)
@@ -455,11 +455,202 @@ void xuat(TREE t)
         break;
     }
 }
+//Cộng 2 phân số
+value CongPhanSo(value a, value b)
+{
+    value sum;
+    sum.tu = a.tu * b.mau + b.tu * a.mau;
+    sum.mau = a.mau * b.mau;
+    return sum;
+}
+
+//Tính tổng các phân số trong cây
+value Tong(TREE t)
+{
+    value sum;
+    sum.tu = 0;
+    sum.mau = 1;
+
+    NODE* p = t.Root;
+    while (p != NULL)
+    {
+        sum = CongPhanSo(sum, p->data);
+        p = p->Right;
+    }
+    return sum;
+}
+
+//Tìm phân số lớn nhất trong cây
+value TimMax(TREE t)
+{
+    value max = t.Root->data;
+    NODE* p = t.Root;
+    while (p != NULL)
+    {
+        if (SoSanhPhanSo(p->data, max) == 1)
+            max = p->data;
+        p = p->Right;
+    }
+    return max;
+}
+
+//Tìm phân số nhỏ nhất trong cây
+value TimMin(TREE t)
+{
+    value min = t.Root->data;
+    NODE* p = t.Root;
+    while (p != NULL)
+    {
+        if (SoSanhPhanSo(p->data, min) == -1)
+            min = p->data;
+        p = p->Left;
+    }
+    return min;
+}
+//Liệt kê tử số lớn hơn mẫu số dùng đệ quy
+void LietKeTuSoLonHonMauSo(NODE *Root)
+{
+    if (Root != NULL)
+    {
+        if (Root->data.tu > Root->data.mau)
+            printf("%d/%d\t", Root->data.tu, Root->data.mau);
+        LietKeTuSoLonHonMauSo(Root->Left);
+        LietKeTuSoLonHonMauSo(Root->Right);
+    }
+}
+
+//Liệt kê tử số nhỏ hơn mẫu số dùng đệ quy
+void LietKeTuSoNhoHonMauSo(NODE* Root)
+{
+    if (Root != NULL)
+    {
+        if (Root->data.tu < Root->data.mau)
+            printf("%d/%d\t", Root->data.tu, Root->data.mau);
+        LietKeTuSoNhoHonMauSo(Root->Left);
+        LietKeTuSoNhoHonMauSo(Root->Right);
+    }
+}
+//Kiểm tra phân số có phải là số nguyên tố
+int KiemTraNguyenTo(int n)
+{
+    if (n < 2)
+        return 0;
+    for (int i = 2; i <= sqrt(n); i++)
+        if (n % i == 0)
+            return 0;
+    return 1;
+}
+
+//Liệt kê các phân số có tủ và mẫu đồng thời là số nguyên tố
+void LietKePhanSoNguyenTo(NODE* Root)
+{
+    if (Root != NULL)
+    {
+        if (KiemTraNguyenTo(Root->data.tu) == 1 && KiemTraNguyenTo(Root->data.mau) == 1)
+            printf("%d/%d\t", Root->data.tu, Root->data.mau);
+        LietKePhanSoNguyenTo(Root->Left);
+        LietKePhanSoNguyenTo(Root->Right);
+    }
+}
+
+//Liệt các phân số ở mức thứ k (k là chiều cao của cây - 1)
+void LietKePhanSoMucK(NODE* Root, int k, int i)
+{
+    if (Root != NULL)
+    {
+        if (i == k)
+            printf("%d/%d\t", Root->data.tu, Root->data.mau);
+        LietKePhanSoMucK(Root->Left, k, i + 1);
+        LietKePhanSoMucK(Root->Right, k, i + 1);
+    }
+}
+
+//Đếm số lượng phần tử ở mức thứ k
+int DemPhanTuMucK(NODE* Root, int k, int i)
+{
+    if (Root == NULL)
+        return 0;
+    if (i == k)
+        return 1;
+    return DemPhanTuMucK(Root->Left, k, i + 1) + DemPhanTuMucK(Root->Right, k, i + 1);
+}
+
+//Tính tổng các phân số ở mức thứ k
+value TongPhanSoMucK(NODE* Root, int k, int i)
+{
+    value sum;
+    sum.tu = 0;
+    sum.mau = 1;
+    if (Root != NULL)
+    {
+        if (i == k)
+            sum = Root->data;
+        sum = CongPhanSo(sum, TongPhanSoMucK(Root->Left, k, i + 1));
+        sum = CongPhanSo(sum, TongPhanSoMucK(Root->Right, k, i + 1));
+    }
+    return sum;
+}
+
+void LietKe(TREE t)
+{
+    printf("\n\n\t\t =========== LIET KE ===========");
+    printf("\n1. Liet ke phan so co tu so lon hon mau so");
+    printf("\n2. Liet ke phan so co tu so nho hon mau so");
+    printf("\n3. Liet ke phan so co tu so va mau so la so nguyen to");
+    printf("\n4. Liet ke phan so o muc k");
+    printf("\n\n\t\t =========== END ===========");
+
+    int luachon;
+    printf("\nNhap lua chon: ");
+    scanf_s("%d", &luachon);
+
+    switch (luachon)
+    {
+    case 1:
+    {
+        printf("\n\n\t=========== LIET KE PHAN SO CO TU SO LON HON MAU SO ===========\n");
+        printf("\t");
+        LietKeTuSoLonHonMauSo(t.Root);
+        _getch();
+        break;
+    }
+    case 2:
+    {
+        printf("\n\n\t=========== LIET KE PHAN SO CO TU SO NHO HON MAU SO ===========\n");
+        printf("\t");
+        LietKeTuSoNhoHonMauSo(t.Root);
+        _getch();
+        break;
+    }
+    case 3: 
+    {
+        printf("\n\n\t=========== LIET KE PHAN SO CO TU SO VA MAU SO LA SO NGUYEN TO ===========\n");
+        printf("\t");
+        LietKePhanSoNguyenTo(t.Root);
+        _getch();
+        break;
+    }
+    case 4:
+    {
+        int k;
+        printf("\nNhap muc k: ");
+        scanf_s("%d", &k);
+        printf("\n\n\t=========== LIET KE PHAN SO O MUC %d ===========\n", k);
+        printf("\t");
+        LietKePhanSoMucK(t.Root, k, 0);
+        _getch();
+        break;
+    }
+    default:
+        printf("\nLua chon khong hop le");
+        break;
+    }
+}
 
 //hàm menu chức năng
-void MENU(TREE& t)
+void MENU(TREE &t)
 {
-    while (1 != 0)
+    while (1!=0)
     {
         printf("\n\n\t\t =========== MENU ===========");
         printf("\n1. Nhap du lieu");
@@ -468,6 +659,12 @@ void MENU(TREE& t)
         printf("\n4. Dem nhung nut la phan so lon hon 1");
         printf("\n5. Toi gian tat ca cac nut trong cay");
         printf("\n6. Tim kiem nut co gia tri bang x");
+        printf("\n7. Tinh tong cac nut trong cay");
+        printf("\n8. Tim phan so lon nhat trong cay");
+        printf("\n9. Tim phan so nho nhat trong cay");
+        printf("\n10. Liet ke");
+        printf("\n11. Dem so phan tu o muc thu k");
+        printf("\n12. Tinh tong cac phan tu o muc thu k");
         printf("\n0. Thoat chuong trinh");
         printf("\n\n\t\t =========== END ===========");
 
@@ -494,7 +691,7 @@ void MENU(TREE& t)
             printf("\nNhap phan so can them: ");
             scanf_s("%d/%d", &x.tu, &x.mau);
 
-            NODE* p = CreateNode(x);
+            NODE *p = CreateNode(x);
             InsertNode(t, p);
             break;
         }
@@ -507,6 +704,9 @@ void MENU(TREE& t)
         case 5:
         {
             ToiGian(t.Root);
+            
+            printf("\nDa thuc hien");
+            _getch();
             break;
         }
         case 6:
@@ -522,19 +722,68 @@ void MENU(TREE& t)
             _getch();
             break;
         }
+        case 7:
+        {
+            value sum = Tong(t);
+            printf("\nTong cac nut trong cay la: %d/%d", sum.tu, sum.mau);
+            RutGonPhanSo(sum);
+            printf("\nRut gon: %d/%d", sum.tu, sum.mau);
+            _getch();
+            break;
+        }
+        case 8:
+        {
+            value max = TimMax(t);
+            printf("\nPhan so lon nhat trong cay la: %d/%d", max.tu, max.mau);
+            _getch();
+            break;
+        }
+        case 9:
+        {
+            value min = TimMin(t);
+            printf("\nPhan so nho nhat trong cay la: %d/%d", min.tu, min.mau);
+            _getch();
+            break;
+        }
+        case 10:
+        {
+            LietKe(t);
+            break;
+        }
+        case 11:
+        {
+            int k;
+            printf("\nNhap muc k: ");
+            scanf_s("%d", &k);
+            printf("\nSo phan tu o muc %d la: %d", k, DemPhanTuMucK(t.Root, k, 0));
+            _getch();
+            break;
+        }
+        case 12:
+        {
+            int k;
+            printf("\nNhap muc k: ");
+            scanf_s("%d", &k);
+            value sum = TongPhanSoMucK(t.Root, k, 0);
+            printf("\nTong cac phan tu o muc %d la: %d/%d", k, sum.tu, sum.mau);
+            RutGonPhanSo(sum);
+            printf("\nRut gon: %d/%d", sum.tu, sum.mau);
+            _getch();
+            break;
+        }
         case 0:
         {
             return;
             break;
         }
         }
-    }
+    }   
 }
 
-int main()
+int main() 
 {
-    TREE t;
-    InitTree(t);
-    MENU(t);
+	TREE t;
+	InitTree(t);
+	MENU(t);
     return 0;
 }
